@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="terra.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#09090b">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="icon" type="image/png" sizes="96x96" href="./icon-96.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="./icon-152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="shortcut icon" href="./icon-192.png">
+<title>terra.</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ══ THEME ══ */
+@media(prefers-color-scheme:light){:root{
+  --bg:#f5f5f7;--bg1:#ffffff;--bg2:#f0f0f2;--bg3:#e5e5ea;
+  --ln:#e5e5ea;--t1:#1c1c1e;--t2:#3a3a3c;--t3:#6c6c70;--t4:#aeaeb2;
+  --inv:#ffffff;--hdr:rgba(245,245,247,0.92);
+  --hero-bg:#1c1c1e;--hero-text:#ffffff;
+  --hero-sub:rgba(255,255,255,0.55);--hero-label:rgba(255,255,255,0.4);
+  --acc:#ff6b6b;--acc2:#ffd93d;
+  --sh:0 2px 12px rgba(0,0,0,0.08);--sh2:0 8px 32px rgba(0,0,0,0.12);
+}}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#000000;--bg1:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+  --ln:#3a3a3c;--t1:#ffffff;--t2:#ebebf5;--t3:#aeaeb2;--t4:#636366;
+  --inv:#000000;--hdr:rgba(0,0,0,0.85);
+  --hero-bg:#2c2c2e;--hero-text:#ffffff;
+  --hero-sub:rgba(255,255,255,0.5);--hero-label:rgba(255,255,255,0.35);
+  --acc:#ff6b6b;--acc2:#ffd93d;
+  --sh:0 2px 12px rgba(0,0,0,0.4);--sh2:0 8px 32px rgba(0,0,0,0.5);
+}}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden;padding-bottom:90px}
+::-webkit-scrollbar{display:none}
+button,select,input,textarea{font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+
+/* ══ LOADER — smooth ══ */
+#loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
+#loader.hide{opacity:0;transform:scale(1.04);pointer-events:none}
+.ldw{font-size:64px;font-weight:800;letter-spacing:-2px;color:var(--t1);opacity:0;animation:ldIn .8s cubic-bezier(.16,1,.3,1) .2s forwards}
+.ldb{width:48px;height:2px;background:var(--bg3);border-radius:2px;overflow:hidden;opacity:0;animation:ldIn .4s ease .7s forwards}
+.ldf{height:100%;background:var(--t1);width:0;animation:ldFill 1.4s cubic-bezier(.4,0,.2,1) .8s forwards}
+.lds{font-size:10px;letter-spacing:4px;color:var(--t4);text-transform:uppercase;opacity:0;animation:ldIn .4s ease 1.0s forwards}
+@keyframes ldIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes ldFill{0%{width:0}60%{width:75%}100%{width:100%}}
+#app{opacity:0;transform:translateY(8px);transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1)}
+#app.show{opacity:1;transform:none}
+
+/* ══ HEADER ══ */
+.hdr{
+  padding:max(52px,env(safe-area-inset-top)) 20px 16px;
+  background:var(--hdr);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:50;
+}
+.hdr-top{display:flex;justify-content:space-between;align-items:center}
+.hdr-title{font-size:36px;font-weight:800;letter-spacing:-1.5px;color:var(--t1);line-height:1}
+.hdr-right{display:flex;gap:8px}
+.hdr-btn{width:38px;height:38px;border-radius:50%;background:var(--bg2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+.hdr-btn:hover{background:var(--bg3)}
+.hdr-btn svg{width:18px;height:18px;color:var(--t2)}
+
+/* ══ SECTIONS — smooth transitions ══ */
+.sec{display:none;padding:0 16px;opacity:0;transform:translateY(10px);transition:opacity .3s cubic-bezier(.4,0,.2,1),transform .3s cubic-bezier(.4,0,.2,1)}
+.sec.on{display:block}
+.sec.visible{opacity:1;transform:none}
+
+/* Scroll smooth */
+html{scroll-behavior:smooth}
+body{-webkit-overflow-scrolling:touch}
+
+/* Menu tap ripple */
+.menu-item{position:relative;overflow:hidden}
+.menu-item::after{content:'';position:absolute;inset:0;background:var(--t1);opacity:0;border-radius:20px;transition:opacity .2s;pointer-events:none}
+.menu-item:active::after{opacity:0.06}
+
+/* Card hover lift */
+.card{transition:box-shadow .2s cubic-bezier(.4,0,.2,1),transform .2s cubic-bezier(.4,0,.2,1)}
+.next-card{transition:background .15s,transform .2s cubic-bezier(.4,0,.2,1),box-shadow .2s}
+.next-card:active{transform:scale(.98);box-shadow:none}
+.pc{transition:background .15s,transform .2s cubic-bezier(.4,0,.2,1)}
+.pc:active{transform:scale(.99)}
+
+/* Menu ic smooth */
+.menu-ic{transition:background .18s cubic-bezier(.4,0,.2,1),transform .18s cubic-bezier(.4,0,.2,1),box-shadow .18s}
+.menu-item:active .menu-ic{transform:scale(.88);box-shadow:none}
+
+/* Checkbox smooth */
+.chk{transition:background .18s cubic-bezier(.4,0,.2,1),border-color .18s,transform .15s}
+.chk:active{transform:scale(.85)}
+.chk.on{animation:checkPop .25s cubic-bezier(.34,1.56,.64,1)}
+@keyframes checkPop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+
+/* Bottom nav icon transitions */
+.bi .bii svg{transition:color .2s,transform .2s cubic-bezier(.34,1.56,.64,1)}
+.bi.on .bii svg{transform:scale(1.1)}
+
+/* Floating button pulse */
+.bnav-plus{animation:pulse 2.5s cubic-bezier(.4,0,.6,1) infinite}
+@keyframes pulse{0%,100%{box-shadow:0 6px 24px rgba(124,58,237,.45),0 2px 8px rgba(0,0,0,.3)}50%{box-shadow:0 6px 32px rgba(124,58,237,.65),0 2px 12px rgba(0,0,0,.3)}}
+.bnav-plus:active{animation:none;transform:translateX(-50%) scale(.9)}
+
+/* ══ HERO CARD ══ */
+.hero{
+  background:var(--hero-bg);
+  border-radius:22px;
+  padding:22px;
+  margin:16px 16px 0;
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--sh2);
+}
+.hero::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.04);
+}
+.hero::after{
+  content:'';position:absolute;bottom:-20px;left:-20px;
+  width:100px;height:100px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.03);
+}
+.hero-label{
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--hero-label);margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;
+}
+.hero-label svg{width:13px;height:13px}
+.hero-streak{
+  font-size:52px;font-weight:800;letter-spacing:-2px;color:var(--hero-text);
+  line-height:1;margin-bottom:4px;
+}
+.hero-streak-lbl{font-size:13px;color:var(--hero-sub);font-weight:400;margin-bottom:18px}
+.hero-row{display:flex;gap:0}
+.hero-stat{flex:1}
+.hero-stat-lbl{font-size:10px;color:var(--hero-label);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px}
+.hero-stat-val{font-size:22px;font-weight:700;color:var(--hero-text);letter-spacing:-0.5px}
+.hero-stat-val.accent{color:#ffd93d}
+.hero-divider{width:1px;background:rgba(255,255,255,0.1);margin:0 16px}
+.hero-bar-wrap{margin-top:16px}
+.hero-bar{height:4px;background:rgba(255,255,255,0.12);border-radius:10px;overflow:hidden}
+.hero-bar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#ffd93d,#ff6b6b);transition:width .8s cubic-bezier(.4,0,.2,1)}
+.hero-bar-label{font-size:11px;color:var(--hero-sub);margin-top:8px;font-style:italic}
+
+/* ══ MENU GRID — Budggt style ══ */
+.menu-section{padding:18px 16px 0}
+.menu-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.menu-title{font-size:18px;font-weight:700;color:var(--t1)}
+.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.menu-item{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;padding:4px 0;
+  transition:transform .15s;
+}
+.menu-item:active{transform:scale(.91)}
+.menu-ic{
+  width:64px;height:64px;
+  border-radius:20px;
+  background:var(--bg2);
+  border:1px solid var(--ln);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--sh);
+  transition:background .15s, transform .15s;
+}
+.menu-item:hover .menu-ic{background:var(--bg3)}
+.menu-ic svg{width:28px;height:28px;stroke:var(--t1);stroke-width:1.75}
+.menu-ic.active-ic{background:var(--t1);border-color:var(--t1)}
+.menu-ic.active-ic svg{stroke:var(--inv)}
+.menu-lbl{font-size:11px;color:var(--t2);font-weight:500;text-align:center;line-height:1.2}
+
+/* ══ QUICK LOG SHEET ══ */
+.qlog-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.qlog-overlay.open{display:flex;animation:up .2s ease}
+.qlog-sheet{background:var(--bg1);border-radius:24px 24px 0 0;padding:20px 20px max(28px,env(safe-area-inset-bottom));width:100%;max-width:430px;box-shadow:0 -4px 32px rgba(0,0,0,0.2)}
+.qlog-handle{width:36px;height:4px;background:var(--bg3);border-radius:10px;margin:0 auto 18px}
+.qlog-title{font-size:17px;font-weight:700;color:var(--t1);margin-bottom:14px}
+
+/* ══ PROFILE MODAL ══ */
+.prof-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.prof-overlay.open{display:flex}
+.prof-sheet{background:var(--bg1);border-radius:24px 24px 0 0;padding:20px 20px max(28px,env(safe-area-inset-bottom));width:100%;max-width:430px}
+.prof-handle{width:36px;height:4px;background:var(--bg3);border-radius:10px;margin:0 auto 18px}
+
+/* ══ AUTOLOG SHEET ══ */
+.als{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg1);border-radius:24px 24px 0 0;padding:20px 20px max(28px,env(safe-area-inset-bottom));z-index:150;display:none;box-shadow:0 -4px 32px rgba(0,0,0,0.2)}
+.als.open{display:block;animation:slideUp .28s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{transform:translateX(-50%) translateY(100%)}to{transform:translateX(-50%) translateY(0)}}
+
+/* ══ CARDS ══ */
+.card{background:var(--bg1);border:1px solid var(--ln);border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:var(--sh)}
+.crd{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+.cic{width:28px;height:28px;border-radius:8px;background:var(--bg2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cic svg{width:14px;height:14px;color:var(--t2)}
+.ctt{font-size:13px;font-weight:600;color:var(--t2)}
+
+/* ══ STATS ROW ══ */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.stat-box{background:var(--bg1);border:1px solid var(--ln);border-radius:14px;padding:14px;box-shadow:var(--sh)}
+.stat-box .sn{font-size:26px;font-weight:800;letter-spacing:-1px;color:var(--t1);line-height:1;margin-bottom:3px}
+.stat-box .sl{font-size:11px;color:var(--t3);font-weight:500}
+.stat-box .ss{font-size:10px;color:var(--t4);margin-top:2px}
+
+/* ══ NEXT CARD ══ */
+.next-card{background:var(--bg1);border:1px solid var(--ln);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:background .15s;box-shadow:var(--sh)}
+.next-card:hover{background:var(--bg2)}
+.next-card:active{transform:scale(.98)}
+.nic{width:42px;height:42px;background:var(--t1);border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nic svg{width:18px;height:18px;color:var(--inv)}
+.nlbl{font-size:10px;color:var(--t4);font-weight:600;letter-spacing:.6px;text-transform:uppercase}
+.nttl{font-size:14px;font-weight:700;color:var(--t1);margin-top:2px}
+.nsub{font-size:11px;color:var(--t3);margin-top:1px}
+.ntap{font-size:10px;color:var(--t4);margin-top:3px}
+
+/* ══ AFFIRMATION ══ */
+.aff-card{background:var(--bg1);border:1px solid var(--ln);border-radius:16px;padding:18px;margin-bottom:10px;box-shadow:var(--sh)}
+.aff-txt{font-size:14px;line-height:1.65;color:var(--t1);font-weight:400;margin-bottom:12px;transition:opacity .25s}
+.aff-foot{display:flex;justify-content:space-between;align-items:center}
+.aff-dots{display:flex;gap:4px}
+.aff-dot{height:4px;width:4px;border-radius:2px;background:var(--bg3);transition:all .3s}
+.aff-dot.on{width:14px;background:var(--t1)}
+.aff-ctr{font-size:10px;color:var(--t4)}
+
+/* ══ PHASE ══ */
+.pc{background:var(--bg1);border:1px solid var(--ln);border-radius:16px;padding:14px;margin-bottom:8px;cursor:pointer;transition:background .15s;box-shadow:var(--sh)}
+.pc:hover{background:var(--bg2)}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.pn{font-size:10px;color:var(--t4);font-weight:600;letter-spacing:.7px;text-transform:uppercase;margin-bottom:3px}
+.pt{font-size:13px;font-weight:700;color:var(--t1)}
+.pp{font-size:11px;color:var(--t3);margin-top:2px}
+.bdg{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;flex-shrink:0}
+.bon{background:var(--t1);color:var(--inv)}
+.bup{background:var(--bg2);color:var(--t3);border:1px solid var(--ln)}
+.pbar{height:4px;background:var(--bg3);border-radius:10px;overflow:hidden;margin-bottom:5px}
+.pfil{height:100%;background:var(--t1);border-radius:10px;transition:width .6s}
+.pmeta{display:flex;justify-content:space-between}
+.pmeta span{font-size:11px;color:var(--t4)}
+.tl{display:none;border-top:1px solid var(--ln);margin-top:10px;padding-top:10px}
+.tl.open{display:block}
+.tr2{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--ln);flex-wrap:wrap}
+.tr2:last-child{border-bottom:none;padding-bottom:0}
+.tr2:first-child{padding-top:0}
+.chk{width:19px;height:19px;border-radius:6px;border:1.5px solid var(--bg3);background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s}
+.chk svg{width:10px;height:10px;display:none}
+.chk.on{background:var(--t1);border-color:var(--t1)}
+.chk.on svg{display:block;color:var(--inv)}
+.tn{font-size:13px;color:var(--t1);flex:1;min-width:0;line-height:1.4}
+.tn.done{color:var(--t4);text-decoration:line-through}
+.nb{background:var(--bg2);border:1px solid var(--ln);border-radius:6px;padding:3px 7px;cursor:pointer;font-size:10px;color:var(--t3);font-family:inherit;display:flex;align-items:center;gap:3px;flex-shrink:0}
+.nb svg{width:9px;height:9px}
+.na{width:100%;background:var(--bg2);border:1px solid var(--ln);border-radius:8px;padding:8px 11px;font-family:inherit;font-size:12px;color:var(--t1);outline:none;resize:none;margin-top:6px;display:none;transition:border-color .15s}
+.na.open{display:block}
+.na:focus{border-color:var(--t1)}
+.na::placeholder{color:var(--t4)}
+
+/* ══ CALENDAR ══ */
+.calcard{background:var(--bg1);border:1px solid var(--ln);border-radius:16px;padding:14px;margin-bottom:10px;overflow:hidden;box-shadow:var(--sh)}
+.calh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.calt{font-size:13px;font-weight:600;color:var(--t1)}
+.cals{font-size:11px;color:var(--t3)}
+.camn{display:flex;padding-left:26px;margin-bottom:3px}
+.caml{font-size:9px;color:var(--t4);flex:1}
+.carow{display:flex;gap:3px}
+.cady{display:flex;flex-direction:column;gap:2px;margin-right:4px}
+.cadyl{font-size:9px;color:var(--t4);height:11px;display:flex;align-items:center}
+.cagr{display:flex;gap:2px;flex:1;overflow-x:auto}
+.cawk{display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.cacel{width:11px;height:11px;border-radius:2px}
+.cacel[data-v="0"]{background:var(--bg3)}
+.cacel[data-v="1"]{background:var(--t4)}
+.cacel[data-v="2"]{background:var(--t3)}
+.cacel[data-v="3"]{background:var(--t2)}
+.cacel[data-v="4"]{background:var(--t1)}
+.caleg{display:flex;align-items:center;gap:4px;margin-top:8px;justify-content:flex-end}
+.caleg span{font-size:9px;color:var(--t4)}
+.calegcl{width:11px;height:11px;border-radius:2px}
+
+/* ══ FORM ══ */
+.fi{width:100%;background:var(--bg2);border:1px solid var(--ln);border-radius:10px;padding:11px 13px;font-family:inherit;font-size:13px;color:var(--t1);outline:none;resize:none;transition:border-color .15s}
+.fi:focus{border-color:var(--t1)}
+.fi::placeholder{color:var(--t4)}
+.flbl{font-size:11px;font-weight:600;color:var(--t3);margin:10px 0 5px;letter-spacing:.3px;text-transform:uppercase}
+.fgrp{margin-bottom:10px}
+.moodrow{display:flex;gap:6px}
+.moodbtn{flex:1;height:44px;border-radius:10px;border:1px solid var(--ln);background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.moodbtn svg{width:22px;height:22px;color:var(--t3)}
+.moodbtn.sel{border-color:var(--t1);background:var(--t1)}
+.moodbtn.sel svg{color:var(--inv)}
+.btnp{width:100%;padding:13px;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;border:none;background:var(--t1);color:var(--inv);margin-top:10px;transition:opacity .15s}
+.btnp:hover{opacity:.8}
+.btnp:active{transform:scale(.98)}
+.btns{width:100%;padding:11px;border-radius:11px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--ln);background:var(--bg2);color:var(--t2);margin-top:8px}
+.btns:hover{background:var(--bg3)}
+
+/* ══ LOG ENTRY ══ */
+.loge{background:var(--bg1);border:1px solid var(--ln);border-left:3px solid var(--t1);border-radius:12px;padding:12px;margin-bottom:8px;box-shadow:var(--sh)}
+.logt{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.logd{font-size:10px;color:var(--t4);font-weight:500}
+.logtx{font-size:13px;color:var(--t2);line-height:1.5}
+.logh{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11px;color:var(--t2);background:var(--bg2);border:1px solid var(--ln);border-radius:20px;padding:2px 8px}
+.logh svg{width:10px;height:10px}
+
+/* ══ RESOURCES ══ */
+.ri{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--ln);align-items:flex-start}
+.ri:last-child{border-bottom:none;padding-bottom:0}
+.ri:first-child{padding-top:0}
+.ric{width:36px;height:44px;border-radius:8px;background:var(--bg2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ric svg{width:16px;height:16px;color:var(--t2)}
+.rin{flex:1;min-width:0}
+.rt{font-size:13px;font-weight:600;color:var(--t1)}
+.ra{font-size:11px;color:var(--t3);margin-top:2px}
+.rp{font-size:11px;color:var(--t2);font-weight:500;margin-top:3px}
+.rr{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.rl{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--inv);text-decoration:none;background:var(--t1);border-radius:20px;padding:5px 11px;white-space:nowrap}
+.chip{font-size:10px;padding:2px 7px;border-radius:20px;background:var(--bg2);color:var(--t3);border:1px solid var(--ln);display:inline-block;margin:2px 2px 0 0}
+
+/* ══ INTEGRATION ══ */
+.intcard{background:var(--bg1);border:1px solid var(--ln);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:11px;box-shadow:var(--sh)}
+.intic{width:38px;height:38px;border-radius:10px;background:var(--bg2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.intt{font-size:13px;font-weight:600;color:var(--t1)}
+.ints{font-size:11px;color:var(--t3);margin-top:2px}
+.ibdg{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px}
+.ion{background:var(--t1);color:var(--inv)}
+.ioff{background:var(--bg2);color:var(--t3);border:1px solid var(--ln)}
+.iform{display:none;margin-top:8px}
+.iform.open{display:block}
+.ihlp{font-size:10px;color:var(--t3);line-height:1.7;margin-bottom:10px}
+.ihlp a{color:var(--t1);font-weight:500;text-decoration:none}
+
+/* ══ MINDFUL ══ */
+/* Fixed: background always #18181b (dark surface), text always near-white — no CSS var inheritance */
+.mf-hero{background:#18181b;border-radius:20px;padding:22px;margin-bottom:10px;border:1px solid #2a2a2e}
+@media(prefers-color-scheme:light){.mf-hero{background:#18181b;border:none}}
+.mf-label-dark{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:12px}
+.mf-txt{font-size:16px;line-height:1.65;font-weight:400;color:#f0f0f2 !important;margin-bottom:14px;transition:opacity .25s}
+.mf-foot{display:flex;justify-content:space-between;align-items:center}
+.mf-dots{display:flex;gap:4px}
+.mf-dot{height:4px;width:4px;border-radius:2px;background:rgba(255,255,255,0.18);transition:all .3s}
+.mf-dot.on{width:14px;background:rgba(255,255,255,0.7)}
+.mf-ctr{font-size:10px;color:rgba(255,255,255,0.3)}
+
+.mfli{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--ln);align-items:flex-start}
+.mfli:last-child{border-bottom:none;padding-bottom:0}
+.mfli:first-child{padding-top:0}
+.mfd{width:4px;height:4px;border-radius:50%;background:var(--t1);margin-top:5px;flex-shrink:0}
+.mft{font-size:13px;color:var(--t2);line-height:1.55}
+
+/* ══ TIMER ══ */
+.ticard{background:var(--bg1);border:1px solid var(--ln);border-radius:22px;padding:26px 20px 22px;text-align:center;margin-bottom:10px;box-shadow:var(--sh)}
+.tiring{width:156px;height:156px;margin:0 auto 20px;position:relative}
+.tiring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ringbg{fill:none;stroke:var(--bg3);stroke-width:4}
+.ringfl{fill:none;stroke:var(--t1);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.tice{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.tinum{font-size:36px;font-weight:800;color:var(--t1);line-height:1;letter-spacing:-2px}
+.tist{font-size:11px;color:var(--t4);margin-top:3px}
+.tipreset{display:flex;gap:5px;justify-content:center;margin-bottom:14px}
+.tipbtn{padding:6px 13px;border-radius:20px;border:1px solid var(--ln);background:var(--bg2);color:var(--t3);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
+.tipbtn.on{background:var(--t1);color:var(--inv);border-color:var(--t1);font-weight:600}
+.tibtns{display:flex;gap:8px}
+.tibtn{flex:1;padding:12px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity .15s}
+.tibtnm{background:var(--t1);color:var(--inv)}
+.tibtns2{background:var(--bg2);color:var(--t2);border:1px solid var(--ln)}
+
+/* ══ DRAFT ══ */
+.dtt{width:100%;background:transparent;border:none;outline:none;font-family:inherit;font-size:17px;font-weight:700;color:var(--t1);margin-bottom:8px;letter-spacing:-.3px}
+.dtt::placeholder{color:var(--t4)}
+.dtb{width:100%;background:transparent;border:none;outline:none;font-family:inherit;font-size:13px;color:var(--t2);resize:none;min-height:180px;line-height:1.7}
+.dtb::placeholder{color:var(--t4)}
+.divider{height:1px;background:var(--ln);margin:8px 0 12px}
+
+/* ══ BOTTOM NAV — Budggt style with + in center ══ */
+.bnav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;
+  background:var(--bg1);
+  border-top:1px solid var(--ln);
+  padding:8px 0 max(16px,env(safe-area-inset-bottom));
+  display:flex;align-items:center;z-index:100;
+  box-shadow:0 -4px 24px rgba(0,0,0,0.06);
+}
+.bi{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 8px;background:none;border:none}
+.bii{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:all .15s}
+.bii svg{width:22px;height:22px;color:var(--t4);transition:color .15s}
+.bil{font-size:10px;color:var(--t4);font-weight:500;transition:color .15s}
+.bi.on .bii svg{color:var(--t1)}
+.bi.on .bil{color:var(--t1);font-weight:700}
+
+/* CENTER + BUTTON — FLOATING, not inside nav */
+.bnav-plus{
+  position:fixed;
+  bottom:max(22px, calc(env(safe-area-inset-bottom) + 14px));
+  left:50%;transform:translateX(-50%);
+  width:58px;height:58px;
+  border-radius:50%;
+  background:#7c3aed;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  border:3px solid var(--bg);
+  box-shadow:0 6px 24px rgba(124,58,237,0.45), 0 2px 8px rgba(0,0,0,0.3);
+  transition:transform .15s, box-shadow .15s;
+  z-index:200;
+}
+.bnav-plus:hover{box-shadow:0 8px 32px rgba(124,58,237,0.6)}
+.bnav-plus:active{transform:translateX(-50%) scale(.9)}
+.bnav-plus svg{width:26px;height:26px;color:#ffffff}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--t1);border-radius:20px;padding:9px 18px;font-size:12px;font-weight:500;color:var(--inv);z-index:300;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1}
+
+/* ══ EMPTY ══ */
+.empt{text-align:center;padding:32px 20px}
+.empic{width:44px;height:44px;background:var(--bg2);border:1px solid var(--ln);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.empic svg{width:20px;height:20px;color:var(--t4)}
+.empt2{font-size:13px;font-weight:600;color:var(--t2);margin-bottom:3px}
+.emps{font-size:11px;color:var(--t4)}
+.seclbl{font-size:10px;font-weight:700;color:var(--t4);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="ldw">terra.</div>
+  <div class="ldb"><div class="ldf"></div></div>
+  <div class="lds">learn · log · grow</div>
+</div>
+
+<!-- PROFILE SHEET -->
+<div class="prof-overlay" id="profModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="prof-sheet">
+    <div class="prof-handle"></div>
+    <div style="font-size:17px;font-weight:700;color:var(--t1);margin-bottom:14px">Edit Profil</div>
+    <div class="fgrp"><div class="flbl">Nama</div><input class="fi" id="pName" placeholder="Nama kamu..."></div>
+    <div class="fgrp"><div class="flbl">Target Sertifikasi</div><input class="fi" id="pTarget" placeholder="AWS SAA-C03 · Oktober 2026"></div>
+    <button class="btnp" onclick="saveProf()">Simpan</button>
+  </div>
+</div>
+
+<!-- QUICK LOG SHEET -->
+<div class="qlog-overlay" id="qlogModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="qlog-sheet">
+    <div class="qlog-handle"></div>
+    <div class="qlog-title">Catat Sesi Belajar</div>
+    <div class="flbl">Apa yang dipelajari?</div>
+    <textarea class="fi" id="qlogText" rows="3" placeholder="Topik, insight, atau kesulitan hari ini..." style="margin-bottom:8px"></textarea>
+    <div class="flbl">Durasi (jam)</div>
+    <input class="fi" id="qlogHrs" type="number" min="0.5" max="12" step="0.5" placeholder="Contoh: 1.5" style="margin-bottom:8px">
+    <div class="flbl">Mood</div>
+    <div class="moodrow" style="margin-bottom:4px">
+      <button class="moodbtn" onclick="qpm(this,'tired')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-1 4-1 4 1 4 1"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M9 6c0-1 .5-2 1.5-2s1.5 1 1.5 2"/><path d="M13 6c0-1 .5-2 1.5-2s1.5 1 1.5 2"/></svg></button>
+      <button class="moodbtn" onclick="qpm(this,'okay')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></button>
+      <button class="moodbtn" onclick="qpm(this,'good')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></button>
+      <button class="moodbtn" onclick="qpm(this,'great')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></button>
+      <button class="moodbtn" onclick="qpm(this,'fire')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></button>
+    </div>
+    <button class="btnp" onclick="saveQLog()">Simpan Log</button>
+  </div>
+</div>
+
+<!-- AUTOLOG SHEET -->
+<div class="als" id="alSheet">
+  <div class="prof-handle" style="margin:0 auto 18px"></div>
+  <div style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:3px">Sesi selesai! 🎉</div>
+  <div style="font-size:12px;color:var(--t3);margin-bottom:12px">Catat apa yang kamu pelajari tadi</div>
+  <textarea class="fi" id="alTxt" rows="3" placeholder="Topik atau insight..."></textarea>
+  <div style="display:flex;gap:8px;margin-top:10px">
+    <button class="btns" onclick="closeAL()" style="margin-top:0;flex:1">Lewati</button>
+    <button class="btnp" onclick="saveAL()" style="margin-top:0;flex:1">Simpan Log</button>
+  </div>
+</div>
+
+<div id="app">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-title">terra.</div>
+    <div class="hdr-right">
+      <div class="hdr-btn" onclick="document.getElementById('profModal').classList.add('open')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO CARD -->
+<div class="hero" id="heroCard">
+  <div class="hero-label">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    SEKILAS HARI INI
+  </div>
+  <div class="hero-streak" id="heroStreak">0</div>
+  <div class="hero-streak-lbl">hari streak belajar berturut-turut</div>
+  <div class="hero-row">
+    <div class="hero-stat">
+      <div class="hero-stat-lbl">Jam Belajar</div>
+      <div class="hero-stat-val accent" id="heroHours">0.0</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-lbl">Topik Selesai</div>
+      <div class="hero-stat-val" id="heroTopics">0/24</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-lbl">Terbaik</div>
+      <div class="hero-stat-val" id="heroBest">0 hr</div>
+    </div>
+  </div>
+  <div class="hero-bar-wrap">
+    <div class="hero-bar"><div class="hero-bar-fill" id="heroBar" style="width:0%"></div></div>
+    <div class="hero-bar-label" id="heroBarLabel">Belum ada sesi belajar hari ini.</div>
+  </div>
+</div>
+
+<!-- MENU GRID -->
+<div class="menu-section" id="menuGrid">
+  <div class="menu-header">
+    <div class="menu-title">Menu Utama</div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item" onclick="go('progress')">
+      <div class="menu-ic" id="mic-progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+      <span class="menu-lbl">Progress</span>
+    </div>
+    <div class="menu-item" onclick="go('kalender')">
+      <div class="menu-ic" id="mic-kalender"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <span class="menu-lbl">Kalender</span>
+    </div>
+    <div class="menu-item" onclick="go('mindful')">
+      <div class="menu-ic" id="mic-mindful"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <span class="menu-lbl">Mindful</span>
+    </div>
+    <div class="menu-item" onclick="go('focus')">
+      <div class="menu-ic" id="mic-focus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <span class="menu-lbl">Fokus</span>
+    </div>
+    <div class="menu-item" onclick="go('medium')">
+      <div class="menu-ic" id="mic-medium"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+      <span class="menu-lbl">Medium</span>
+    </div>
+    <div class="menu-item" onclick="go('referensi')">
+      <div class="menu-ic" id="mic-referensi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+      <span class="menu-lbl">Referensi</span>
+    </div>
+    <div class="menu-item" onclick="go('integrasi')">
+      <div class="menu-ic" id="mic-integrasi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+      <span class="menu-lbl">Integrasi</span>
+    </div>
+    <div class="menu-item" onclick="exportData()">
+      <div class="menu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <span class="menu-lbl">Backup</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOME SECTION -->
+<div class="sec on" id="section-home" style="padding-top:16px">
+
+  <!-- AFFIRMATION -->
+  <div class="aff-card">
+    <div class="aff-txt" id="affTxt">Otodidak bukan kelas dua. Beberapa engineer terbaik dunia adalah self-taught learners.</div>
+    <div class="aff-foot">
+      <div class="aff-dots" id="affDots"></div>
+      <span class="aff-ctr" id="affCtr">1/20</span>
+    </div>
+  </div>
+
+  <!-- NEXT STEP -->
+  <div class="next-card" onclick="goNext()">
+    <div class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    <div style="flex:1">
+      <div class="nlbl">Lanjutkan Belajar</div>
+      <div class="nttl" id="nextTtl">SSH — remote access</div>
+      <div class="nsub" id="nextSub">Linux Phase 1</div>
+      <div class="ntap">Tap untuk buka Progress →</div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-box"><div class="sn" id="stD">0</div><div class="sl">Sesi Tercatat</div><div class="ss">Total log</div></div>
+    <div class="stat-box"><div class="sn" id="stT2">0</div><div class="sl">Topik Selesai</div><div class="ss">dari 24 total</div></div>
+  </div>
+
+  <!-- GOALS -->
+  <div class="card">
+    <div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="ctt">Tujuan Akademik</span></div>
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--ln)"><div style="width:30px;height:30px;border-radius:8px;background:var(--bg2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><div style="font-size:13px;font-weight:500;color:var(--t1)">AWS Certified Solutions Architect Associate</div><div style="font-size:11px;color:var(--t3);margin-top:2px" id="gTarget">SAA-C03 · Target 2026</div></div></div>
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--ln)"><div style="width:30px;height:30px;border-radius:8px;background:var(--bg2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div style="font-size:13px;font-weight:500;color:var(--t1)">Cloud Engineer — Remote / International</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Fully self-taught</div></div></div>
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--ln)"><div style="width:30px;height:30px;border-radius:8px;background:var(--bg2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><div style="font-size:13px;font-weight:500;color:var(--t1)">Home Lab Infrastructure</div><div style="font-size:11px;color:var(--t3);margin-top:2px">HP ProDesk · Ubuntu Server · Portfolio nyata</div></div></div>
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0"><div style="width:30px;height:30px;border-radius:8px;background:var(--bg2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div><div style="font-size:13px;font-weight:500;color:var(--t1)">Office Server Infrastructure</div><div style="font-size:11px;color:var(--t3);margin-top:2px">On-premise · Production environment · IT ops</div></div></div>
+  </div>
+
+  <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+</div>
+
+<!-- PROGRESS -->
+<div class="sec" id="section-progress" style="padding-top:16px">
+  <div class="pc" onclick="tog('ph1')">
+    <div class="ph"><div><div class="pn">Phase 1</div><div class="pt">Linux, Networking & Docker</div><div class="pp">Maret – April 2026</div></div><span class="bdg bon">Aktif</span></div>
+    <div class="pbar"><div class="pfil" id="ph1f" style="width:0%"></div></div>
+    <div class="pmeta"><span id="ph1p">0%</span><span id="ph1c">0/10</span></div>
+    <div class="tl" id="ph1">
+      <div class="tr2"><div class="chk" onclick="ck(event,'t1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t1n">pwd, ls, ls -la, cd, cat</div><button class="nb" onclick="tgl(event,'n1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n1" placeholder="Catatan..." rows="2" onblur="saveNote('n1')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t2n">Update sistem & kernel</div><button class="nb" onclick="tgl(event,'n2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n2" placeholder="Catatan..." rows="2" onblur="saveNote('n2')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t3n">Eksplorasi /etc/nginx & nginx.conf</div><button class="nb" onclick="tgl(event,'n3')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n3" placeholder="Catatan..." rows="2" onblur="saveNote('n3')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t4n">SSH — remote access</div><button class="nb" onclick="tgl(event,'n4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n4" placeholder="Catatan..." rows="2" onblur="saveNote('n4')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t5')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t5n">File permission & user management</div><button class="nb" onclick="tgl(event,'n5')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n5" placeholder="Catatan..." rows="2" onblur="saveNote('n5')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t6')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t6n">Text editor — nano & vim</div><button class="nb" onclick="tgl(event,'n6')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n6" placeholder="Catatan..." rows="2" onblur="saveNote('n6')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t7')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t7n">Process management & systemd</div><button class="nb" onclick="tgl(event,'n7')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n7" placeholder="Catatan..." rows="2" onblur="saveNote('n7')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t8')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t8n">Networking — IP, DNS, port, firewall</div><button class="nb" onclick="tgl(event,'n8')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n8" placeholder="Catatan..." rows="2" onblur="saveNote('n8')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t9')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t9n">Shell scripting dasar</div><button class="nb" onclick="tgl(event,'n9')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n9" placeholder="Catatan..." rows="2" onblur="saveNote('n9')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t10')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t10n">Docker — container, Dockerfile, compose</div><button class="nb" onclick="tgl(event,'n10')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n10" placeholder="Catatan..." rows="2" onblur="saveNote('n10')"></textarea>
+    </div>
+  </div>
+  <div class="pc" onclick="tog('ph2')">
+    <div class="ph"><div><div class="pn">Phase 2</div><div class="pt">AWS Fundamentals & Cloud Practitioner</div><div class="pp">Mei – Juli 2026</div></div><span class="bdg bup">Upcoming</span></div>
+    <div class="pbar"><div class="pfil" id="ph2f" style="width:0%"></div></div>
+    <div class="pmeta"><span id="ph2p">0%</span><span id="ph2c">0/5</span></div>
+    <div class="tl" id="ph2">
+      <div class="tr2"><div class="chk" onclick="ck(event,'t11')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t11n">Cloud Fundamentals & Model Layanan</div><button class="nb" onclick="tgl(event,'n11')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n11" placeholder="Catatan..." rows="2" onblur="saveNote('n11')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t12')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t12n">AWS Core Services — EC2, S3, IAM, VPC</div><button class="nb" onclick="tgl(event,'n12')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n12" placeholder="Catatan..." rows="2" onblur="saveNote('n12')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t13')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t13n">Security & Billing AWS</div><button class="nb" onclick="tgl(event,'n13')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n13" placeholder="Catatan..." rows="2" onblur="saveNote('n13')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t14')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t14n">Cloud Practitioner Prep & Exam</div><button class="nb" onclick="tgl(event,'n14')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n14" placeholder="Catatan..." rows="2" onblur="saveNote('n14')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t15')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t15n">Lulus AWS Cloud Practitioner CLF-C02</div><button class="nb" onclick="tgl(event,'n15')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n15" placeholder="Catatan..." rows="2" onblur="saveNote('n15')"></textarea>
+    </div>
+  </div>
+  <div class="pc" onclick="tog('ph3')">
+    <div class="ph"><div><div class="pn">Phase 3</div><div class="pt">AWS Solutions Architect Associate</div><div class="pp">Agustus – Oktober 2026</div></div><span class="bdg bup">Upcoming</span></div>
+    <div class="pbar"><div class="pfil" id="ph3f" style="width:0%"></div></div>
+    <div class="pmeta"><span id="ph3p">0%</span><span id="ph3c">0/6</span></div>
+    <div class="tl" id="ph3">
+      <div class="tr2"><div class="chk" onclick="ck(event,'t16')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t16n">Well-Architected Framework</div><button class="nb" onclick="tgl(event,'n16')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n16" placeholder="Catatan..." rows="2" onblur="saveNote('n16')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t17')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t17n">Compute & Storage lanjut</div><button class="nb" onclick="tgl(event,'n17')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n17" placeholder="Catatan..." rows="2" onblur="saveNote('n17')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t18')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t18n">Networking lanjut — VPC, Route53, CloudFront</div><button class="nb" onclick="tgl(event,'n18')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n18" placeholder="Catatan..." rows="2" onblur="saveNote('n18')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t19')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t19n">Database & App Services</div><button class="nb" onclick="tgl(event,'n19')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n19" placeholder="Catatan..." rows="2" onblur="saveNote('n19')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t20')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t20n">SAA-C03 Practice Exam Intensif</div><button class="nb" onclick="tgl(event,'n20')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n20" placeholder="Catatan..." rows="2" onblur="saveNote('n20')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t21')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t21n">Lulus AWS SAA-C03</div><button class="nb" onclick="tgl(event,'n21')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n21" placeholder="Catatan..." rows="2" onblur="saveNote('n21')"></textarea>
+    </div>
+  </div>
+  <div class="pc" onclick="tog('ph4')">
+    <div class="ph"><div><div class="pn">Phase 4</div><div class="pt">Project & Job Hunt</div><div class="pp">November – Desember 2026</div></div><span class="bdg bup">Upcoming</span></div>
+    <div class="pbar"><div class="pfil" id="ph4f" style="width:0%"></div></div>
+    <div class="pmeta"><span id="ph4p">0%</span><span id="ph4c">0/3</span></div>
+    <div class="tl" id="ph4">
+      <div class="tr2"><div class="chk" onclick="ck(event,'t22')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t22n">Home Server Infrastructure Project</div><button class="nb" onclick="tgl(event,'n22')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n22" placeholder="Catatan..." rows="2" onblur="saveNote('n22')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t23')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t23n">Portfolio, GitHub & LinkedIn</div><button class="nb" onclick="tgl(event,'n23')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n23" placeholder="Catatan..." rows="2" onblur="saveNote('n23')"></textarea>
+      <div class="tr2"><div class="chk" onclick="ck(event,'t24')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tn" id="t24n">Diterima sebagai Cloud Engineer</div><button class="nb" onclick="tgl(event,'n24')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Catatan</button></div><textarea class="na" id="n24" placeholder="Catatan..." rows="2" onblur="saveNote('n24')"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- KALENDER -->
+<div class="sec" id="section-kalender" style="padding-top:16px">
+  <div class="calcard"><div class="calh"><span class="calt">Activity</span><span class="cals" id="calTotal">0 sesi</span></div><div id="calMonths" class="camn"></div><div class="carow"><div class="cady"><div class="cadyl" style="height:13px"></div><div class="cadyl">Sen</div><div class="cadyl" style="height:13px"></div><div class="cadyl">Rab</div><div class="cadyl" style="height:13px"></div><div class="cadyl">Jum</div><div class="cadyl" style="height:13px"></div></div><div class="cagr" id="calGrid"></div></div><div class="caleg"><span>Jarang</span><div class="calegcl" data-v="0"></div><div class="calegcl" data-v="1"></div><div class="calegcl" data-v="2"></div><div class="calegcl" data-v="3"></div><div class="calegcl" data-v="4"></div><span>Sering</span></div></div>
+  <div class="card"><div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="ctt">Ringkasan Bulanan</span></div><div id="monthlySummary" style="font-size:13px;color:var(--t4);text-align:center;padding:8px">Belum ada data.</div></div>
+</div>
+
+<!-- LOG — accessed via + button -->
+<div class="sec" id="section-log" style="padding-top:16px">
+  <div class="seclbl">Riwayat Log</div>
+  <div id="logList"></div>
+</div>
+
+<!-- MEDIUM -->
+<div class="sec" id="section-medium" style="padding-top:16px">
+  <div class="card" style="background:var(--bg2)"><div style="font-size:12px;color:var(--t3);line-height:1.6">Generate draft dari log belajarmu → copy ke <a href="https://medium.com/new-story" target="_blank" style="color:var(--t1);font-weight:600;text-decoration:none">medium.com</a></div></div>
+  <div class="card">
+    <div class="flbl">Sumber</div>
+    <select class="fi" id="draftSrc" style="cursor:pointer"><option value="recent">5 Log terbaru</option><option value="week">Log minggu ini</option><option value="all">Semua log</option><option value="progress">Progress saat ini</option></select>
+    <div class="flbl">Judul (opsional)</div>
+    <input class="fi" id="draftTitleIn" placeholder="Kosongkan untuk auto-generate...">
+    <button class="btnp" onclick="genDraft()">Generate Draft</button>
+  </div>
+  <div id="draftResult" style="display:none"><div class="card"><input class="dtt" id="draftTitle" placeholder="Judul..."><div class="divider"></div><textarea class="dtb fi" id="draftBody" rows="12" placeholder="Isi artikel..."></textarea><div style="display:flex;gap:8px;margin-top:10px"><button class="btns" onclick="copyDraft()" style="margin-top:0;flex:1">Copy</button><button class="btnp" onclick="window.open('https://medium.com/new-story','_blank')" style="margin-top:0;flex:1">Buka Medium</button></div></div></div>
+</div>
+
+<!-- REFERENSI -->
+<div class="sec" id="section-referensi" style="padding-top:16px">
+
+  <!-- AWS CERT LINKS — top priority -->
+  <div class="card" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #2a2a4e">
+    <div class="crd"><div class="cic" style="background:#7c3aed22;border-color:#7c3aed44"><svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="ctt" style="color:#c4b5fd">Sertifikasi AWS — Link Resmi</span></div>
+    <div class="ri" style="border-color:#2a2a4e"><div class="ric" style="background:#7c3aed22;border-color:#7c3aed44"><svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="rin"><div class="rt" style="color:#e2d9f3">AWS Cloud Practitioner — CLF-C02</div><div class="ra" style="color:#9d8ec4">Training resmi + jadwal ujian</div><div class="rp" style="color:#c4b5fd">~$100 USD · Diskon 50% setelah lulus CLF</div><span class="chip" style="background:#7c3aed22;color:#c4b5fd;border-color:#7c3aed44">Phase 2</span><span class="chip" style="background:#7c3aed22;color:#c4b5fd;border-color:#7c3aed44">Entry Level</span></div><div class="rr"><a class="rl" href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank" style="background:#7c3aed">Daftar ↗</a></div></div>
+    <div class="ri" style="border-color:#2a2a4e"><div class="ric" style="background:#7c3aed22;border-color:#7c3aed44"><svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="rin"><div class="rt" style="color:#e2d9f3">AWS Solutions Architect Associate — SAA-C03</div><div class="ra" style="color:#9d8ec4">Training resmi + jadwal ujian</div><div class="rp" style="color:#c4b5fd">~$150 USD · Target Phase 3</div><span class="chip" style="background:#7c3aed22;color:#c4b5fd;border-color:#7c3aed44">Phase 3</span><span class="chip" style="background:#7c3aed22;color:#c4b5fd;border-color:#7c3aed44">Associate</span></div><div class="rr"><a class="rl" href="https://aws.amazon.com/certification/certified-solutions-architect-associate/" target="_blank" style="background:#7c3aed">Daftar ↗</a></div></div>
+    <div class="ri" style="border-color:#2a2a4e;border-bottom:none;padding-bottom:0"><div class="ric" style="background:#7c3aed22;border-color:#7c3aed44"><svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="rin"><div class="rt" style="color:#e2d9f3">AWS Skill Builder — Training Gratis</div><div class="ra" style="color:#9d8ec4">Learning path resmi dari AWS</div><div class="rp" style="color:#c4b5fd">Gratis · Lab simulasi · Semua level</div><span class="chip" style="background:#7c3aed22;color:#c4b5fd;border-color:#7c3aed44">Gratis</span><span class="chip" style="background:#7c3aed22;color:#c4b5fd;border-color:#7c3aed44">Phase 2–3</span></div><div class="rr"><a class="rl" href="https://explore.skillbuilder.aws/" target="_blank" style="background:#7c3aed">Buka ↗</a></div></div>
+  </div>
+
+  <!-- BUKU PHASE 1 -->
+  <div class="card">
+    <div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><span class="ctt">Buku — Phase 1 (Linux, Networking, Docker)</span></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">The Linux Command Line, 2nd Ed.</div><div class="ra">William Shotts · No Starch Press</div><div class="rp">Gratis PDF resmi — wajib baca!</div><span class="chip">Linux</span><span class="chip">Gratis</span><span class="chip">Phase 1</span></div><div class="rr"><a class="rl" href="https://linuxcommand.org/tlcl.php" target="_blank">Buka ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">How Linux Works, 3rd Ed.</div><div class="ra">Brian Ward · No Starch Press</div><div class="rp">~Rp 150.000 · Lebih dalam dari TLCL</div><span class="chip">Linux</span><span class="chip">Phase 1</span></div><div class="rr"><a class="rl" href="https://www.tokopedia.com/search?q=how+linux+works+brian+ward" target="_blank">Cari ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">Linux Bible, 10th Ed.</div><div class="ra">Christopher Negus · Wiley</div><div class="rp">~Rp 200.000 · Referensi lengkap</div><span class="chip">Linux</span><span class="chip">Referensi</span></div><div class="rr"><a class="rl" href="https://www.tokopedia.com/search?q=linux+bible+negus" target="_blank">Cari ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">Computer Networking: Top-Down Approach</div><div class="ra">Kurose & Ross · Pearson</div><div class="rp">~Rp 180.000 · Networking fundamentals</div><span class="chip">Networking</span><span class="chip">Phase 1</span></div><div class="rr"><a class="rl" href="https://www.tokopedia.com/search?q=computer+networking+kurose+ross" target="_blank">Cari ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">Docker Deep Dive</div><div class="ra">Nigel Poulton</div><div class="rp">~Rp 80.000 · Docker dari nol</div><span class="chip">Docker</span><span class="chip">Phase 1</span></div><div class="rr"><a class="rl" href="https://www.tokopedia.com/search?q=docker+deep+dive+nigel+poulton" target="_blank">Cari ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">The Linux Command Line (Indonesia)</div><div class="ra">Jubilee Enterprise · Gramedia</div><div class="rp">~Rp 45.000 · Versi Bahasa Indonesia</div><span class="chip">Linux</span><span class="chip">Indonesia</span></div><div class="rr"><a class="rl" href="https://www.gramedia.com/search/?q=linux+command+line+jubilee" target="_blank">Beli ↗</a></div></div>
+  </div>
+
+  <!-- BUKU PHASE 2–3 -->
+  <div class="card">
+    <div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><span class="ctt">Buku — Phase 2–3 (AWS Cloud)</span></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">AWS untuk Pemula</div><div class="ra">Jubilee Enterprise · Gramedia</div><div class="rp">Rp 43.300 · Beli sekarang!</div><span class="chip">AWS</span><span class="chip">Indonesia</span><span class="chip">Phase 2</span></div><div class="rr"><a class="rl" href="https://www.gramedia.com/search/?q=aws+untuk+pemula+jubilee" target="_blank">Beli ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">Cloud Computing — Panduan AWS</div><div class="ra">Nuruddin Wiranda · Penerbit Andi</div><div class="rp">Rp 53.200 · Bahasa Indonesia</div><span class="chip">AWS</span><span class="chip">Indonesia</span><span class="chip">Phase 2</span></div><div class="rr"><a class="rl" href="https://www.tokopedia.com/search?q=cloud+computing+nuruddin+wiranda" target="_blank">Cari ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">AWS Certified Cloud Practitioner Study Guide</div><div class="ra">Ben Piper & David Clinton · Sybex</div><div class="rp">~Rp 250.000 · CLF-C02 prep</div><span class="chip">CLF-C02</span><span class="chip">Phase 2</span></div><div class="rr"><a class="rl" href="https://www.tokopedia.com/search?q=aws+cloud+practitioner+study+guide+sybex" target="_blank">Cari ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">AWS Solutions Architect Study Guide</div><div class="ra">Ben Piper · Sybex/Wiley</div><div class="rp">~Rp 300.000 · SAA-C03 prep terbaik</div><span class="chip">SAA-C03</span><span class="chip">Phase 3</span></div><div class="rr"><a class="rl" href="https://www.tokopedia.com/search?q=aws+solutions+architect+study+guide+sybex" target="_blank">Cari ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="rin"><div class="rt">AWS Well-Architected Framework</div><div class="ra">Amazon Web Services · Docs resmi</div><div class="rp">Gratis — wajib baca sebelum SAA</div><span class="chip">SAA</span><span class="chip">Gratis</span><span class="chip">Phase 3</span></div><div class="rr"><a class="rl" href="https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html" target="_blank">Buka ↗</a></div></div>
+  </div>
+
+  <!-- YOUTUBE PHASE 1 -->
+  <div class="card">
+    <div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><span class="ctt">YouTube — Phase 1 (Linux, Docker, Networking)</span></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">NetworkChuck — Linux for Hackers</div><div class="ra">YouTube · Gratis · English</div><div class="rp">Playlist lengkap · Sangat recommended</div><span class="chip">Linux</span><span class="chip">Gratis</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/playlist?list=PLIhvC56v63IJIujb5cyE13oLuyORZpdkL" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">LearnLinuxTV — Linux Fundamentals</div><div class="ra">YouTube · Gratis · English</div><div class="rp">Ubuntu Server, sysadmin basics</div><span class="chip">Ubuntu</span><span class="chip">Server</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/@LearnLinuxTV/playlists" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">Programmer Zaman Now — Linux & DevOps</div><div class="ra">YouTube · Gratis · Bahasa Indonesia</div><div class="rp">Terbaik untuk pemula Indonesia</div><span class="chip">Linux</span><span class="chip">Indonesia</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/@ProgrammerZamanNow/playlists" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">Techno Tim — Docker & Home Server</div><div class="ra">YouTube · Gratis · English</div><div class="rp">Self-hosting, containers, homelab</div><span class="chip">Docker</span><span class="chip">Home Server</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/@TechnoTim/videos" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">freeCodeCamp — Bash Scripting Full Course</div><div class="ra">YouTube · Gratis · 5 jam</div><div class="rp">Shell scripting lengkap dari nol</div><span class="chip">Bash</span><span class="chip">Scripting</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/watch?v=e7BufAVwDiM" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">NetworkChuck — Docker Tutorial</div><div class="ra">YouTube · Gratis · English</div><div class="rp">Docker dari nol, fun dan mudah</div><span class="chip">Docker</span><span class="chip">Gratis</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/watch?v=eGz9DS-aIeY" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">TryHackMe — Linux Fundamentals</div><div class="ra">tryhackme.com · Lab interaktif</div><div class="rp">Belajar Linux sambil praktek langsung</div><span class="chip">Linux</span><span class="chip">Lab</span></div><div class="rr"><a class="rl" href="https://tryhackme.com/module/linux-fundamentals" target="_blank">Coba ↗</a></div></div>
+  </div>
+
+  <!-- YOUTUBE + KURSUS PHASE 2–3 -->
+  <div class="card">
+    <div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><span class="ctt">YouTube & Kursus — Phase 2–3 (AWS)</span></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">freeCodeCamp — AWS Full Course 14 jam</div><div class="ra">YouTube · Gratis · English</div><div class="rp">AWS lengkap untuk pemula — mulai di sini!</div><span class="chip">AWS</span><span class="chip">Gratis</span><span class="chip">Phase 2</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/watch?v=NhDYbskXRgc" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">TechWorld with Nana — AWS Crash Course</div><div class="ra">YouTube · Gratis · English</div><div class="rp">Penjelasan AWS services yang sangat jelas</div><span class="chip">AWS</span><span class="chip">Phase 2</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/@TechWorldwithNana/videos" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">NetworkChuck — AWS Tutorial</div><div class="ra">YouTube · Gratis · English</div><div class="rp">EC2, S3, deploy server nyata</div><span class="chip">EC2</span><span class="chip">S3</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/watch?v=BGvya-SgEKU" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div class="rin"><div class="rt">freeCodeCamp — AWS SAA-C03 Full Course</div><div class="ra">YouTube · Gratis · English</div><div class="rp">Persiapan ujian SAA lengkap 14 jam</div><span class="chip">SAA-C03</span><span class="chip">Gratis</span><span class="chip">Phase 3</span></div><div class="rr"><a class="rl" href="https://www.youtube.com/watch?v=c3Cn4xYfxJY" target="_blank">Tonton ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="rin"><div class="rt">AWS SAA — Stephane Maarek (Udemy)</div><div class="ra">Udemy · ~Rp 200rb saat flash sale</div><div class="rp">Rating 4.7 · 300k+ pelajar · Terbaik untuk SAA</div><span class="chip">SAA-C03</span><span class="chip">Phase 3</span></div><div class="rr"><a class="rl" href="https://www.udemy.com/course/aws-certified-solutions-architect-associate-saa-c03/" target="_blank">Beli ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="rin"><div class="rt">AWS CLF — Stephane Maarek (Udemy)</div><div class="ra">Udemy · ~Rp 150rb flash sale</div><div class="rp">Rating 4.7 · CLF-C02 persiapan</div><span class="chip">CLF-C02</span><span class="chip">Phase 2</span></div><div class="rr"><a class="rl" href="https://www.udemy.com/course/aws-certified-cloud-practitioner-new/" target="_blank">Beli ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="rin"><div class="rt">SAA Practice Exams — Jon Bonso (Udemy)</div><div class="ra">Udemy · ~Rp 100rb flash sale</div><div class="rp">6 practice exams · Mirip soal ujian asli</div><span class="chip">SAA-C03</span><span class="chip">Latihan</span></div><div class="rr"><a class="rl" href="https://www.udemy.com/course/aws-certified-solutions-architect-associate-amazon-practice-exams-saa-c03/" target="_blank">Beli ↗</a></div></div>
+  </div>
+
+  <!-- PLATFORM GRATIS -->
+  <div class="card">
+    <div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span class="ctt">Platform Gratis — Wajib Daftar</span></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="rin"><div class="rt">AWS Educate</div><div class="ra">aws.amazon.com/educate</div><div class="rp">Lab hands-on AWS tanpa kartu kredit</div><span class="chip">Gratis</span><span class="chip">Phase 2</span></div><div class="rr"><a class="rl" href="https://aws.amazon.com/id/education/awseducate/" target="_blank">Daftar ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="rin"><div class="rt">AWS Skill Builder</div><div class="ra">explore.skillbuilder.aws</div><div class="rp">Learning path resmi + lab simulasi gratis</div><span class="chip">Gratis</span><span class="chip">Phase 2–3</span></div><div class="rr"><a class="rl" href="https://explore.skillbuilder.aws/" target="_blank">Buka ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="rin"><div class="rt">ExamTopics — Soal Exam Komunitas</div><div class="ra">examtopics.com</div><div class="rp">Soal ujian CLF & SAA dari komunitas global</div><span class="chip">CLF-C02</span><span class="chip">SAA-C03</span><span class="chip">Gratis</span></div><div class="rr"><a class="rl" href="https://www.examtopics.com/exams/amazon/" target="_blank">Buka ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="rin"><div class="rt">Whizlabs — Practice Tests</div><div class="ra">whizlabs.com · Sebagian gratis</div><div class="rp">Soal latihan CLF-C02 & SAA-C03</div><span class="chip">Practice Test</span><span class="chip">Phase 2–3</span></div><div class="rr"><a class="rl" href="https://www.whizlabs.com/aws-certifications/" target="_blank">Buka ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="rin"><div class="rt">TryHackMe — Linux & Cloud</div><div class="ra">tryhackme.com · Sebagian gratis</div><div class="rp">Lab interaktif Linux & cloud security</div><span class="chip">Linux</span><span class="chip">Lab</span><span class="chip">Phase 1</span></div><div class="rr"><a class="rl" href="https://tryhackme.com/" target="_blank">Coba ↗</a></div></div>
+  </div>
+
+  <!-- BUKU PHASE 4 — Career -->
+  <div class="card">
+    <div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="ctt">Karier — Phase 4 (Portfolio & Job Hunt)</span></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">The Phoenix Project</div><div class="ra">Gene Kim · IT Novel</div><div class="rp">~Rp 120.000 · Wajib baca cloud engineer</div><span class="chip">Career</span><span class="chip">DevOps</span></div><div class="rr"><a class="rl" href="https://www.tokopedia.com/search?q=the+phoenix+project+gene+kim" target="_blank">Cari ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="rin"><div class="rt">The DevOps Handbook</div><div class="ra">Gene Kim, Jez Humble · IT Revolution</div><div class="rp">~Rp 180.000 · Praktik DevOps dunia nyata</div><span class="chip">DevOps</span><span class="chip">Phase 4</span></div><div class="rr"><a class="rl" href="https://www.tokopedia.com/search?q=devops+handbook+gene+kim" target="_blank">Cari ↗</a></div></div>
+    <div class="ri"><div class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="rin"><div class="rt">LinkedIn Learning — Cloud Career</div><div class="ra">linkedin.com/learning · Sebagian gratis</div><div class="rp">Cloud career path, resume tips</div><span class="chip">Career</span><span class="chip">Phase 4</span></div><div class="rr"><a class="rl" href="https://www.linkedin.com/learning/topics/cloud-computing" target="_blank">Buka ↗</a></div></div>
+  </div>
+</div>
+
+<!-- INTEGRASI -->
+<div class="sec" id="section-integrasi" style="padding-top:16px">
+  <div class="card" style="background:var(--bg2)"><div style="font-size:12px;color:var(--t3);line-height:1.6">Setiap checklist atau log → GitHub & Telegram otomatis diupdate.</div></div>
+  <div class="intcard"><div class="intic">⚫</div><div style="flex:1"><div class="intt">GitHub Auto-commit</div><div class="ints" id="ghStat">Belum dikonfigurasi</div></div><span class="ibdg ioff" id="ghBadge">Off</span></div>
+  <div class="iform" id="ghForm"><div class="ihlp">1. Buka <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a><br>2. Centang <b>repo</b> → Generate<br>3. Paste di bawah</div><input class="fi" id="ghTok" type="password" placeholder="Token (ghp_...)" style="margin-bottom:8px"><input class="fi" id="ghRep" placeholder="username/repo-name"><button class="btnp" onclick="saveGH()" style="margin-top:8px">Simpan & Aktifkan</button></div>
+  <button onclick="togGH()" class="btns" id="ghBtn">Konfigurasi GitHub</button>
+  <div class="intcard"><div class="intic">✈️</div><div style="flex:1"><div class="intt">Telegram Notifikasi</div><div class="ints" id="tgStat">Belum dikonfigurasi</div></div><span class="ibdg ioff" id="tgBadge">Off</span></div>
+  <div class="iform" id="tgForm"><div class="ihlp">1. Cari <a href="https://t.me/BotFather" target="_blank">@BotFather</a> → /newbot → copy token<br>2. Kirim pesan ke bot<br>3. api.telegram.org/bot{TOKEN}/getUpdates → copy chat_id</div><input class="fi" id="tgTok" type="password" placeholder="Bot Token" style="margin-bottom:8px"><input class="fi" id="tgChat" placeholder="Chat ID"><button class="btnp" onclick="saveTG()" style="margin-top:8px">Simpan & Aktifkan</button></div>
+  <button onclick="togTG()" class="btns" id="tgBtn">Konfigurasi Telegram</button>
+  <div class="card"><div style="font-size:13px;font-weight:600;color:var(--t2);margin-bottom:8px">Push Notification</div><button class="btns" onclick="reqNotif()" id="notifBtn" style="margin-top:0">Aktifkan Notifikasi</button><div id="notifStat" style="font-size:10px;color:var(--t4);margin-top:6px;text-align:center"></div></div>
+  <div class="card"><div style="font-size:13px;font-weight:600;color:var(--t2);margin-bottom:10px">Uji Koneksi</div><button onclick="testAll()" class="btns" style="margin-top:0">Kirim Test</button><div id="testRes" style="font-size:11px;color:var(--t4);margin-top:8px;text-align:center"></div></div>
+</div>
+
+<!-- MINDFUL -->
+<div class="sec" id="section-mindful" style="padding-top:16px">
+  <div class="mf-hero">
+    <div class="mf-label-dark">Mindful</div>
+    <div class="mf-txt" id="mindfulTxt">Kamu bukan hanya belajar teknologi. Kamu sedang membuktikan bahwa siapapun bisa re-skill dengan tekad.</div>
+    <div class="mf-foot"><div class="mf-dots" id="mindfulDots"></div><span class="mf-ctr" id="mindfulCtr">1/30</span></div>
+  </div>
+  <div class="card">
+    <div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="ctt">Prinsip Belajar</span></div>
+    <div class="mfli"><div class="mfd"></div><div class="mft">Pahami konsep sebelum praktek — tanyakan "ini untuk apa?" sebelum mengetik.</div></div>
+    <div class="mfli"><div class="mfd"></div><div class="mft">Dokumentasikan setiap sesi. Catatan belajar adalah aset akademik yang berharga.</div></div>
+    <div class="mfli"><div class="mfd"></div><div class="mft">Frustasi adalah sinyal otak sedang membangun koneksi neural baru — bukan kegagalan.</div></div>
+    <div class="mfli"><div class="mfd"></div><div class="mft">Progress konsisten selalu mengalahkan motivasi yang tidak stabil.</div></div>
+    <div class="mfli"><div class="mfd"></div><div class="mft">Satu topik dikuasai penuh lebih baik dari sepuluh topik dipahami setengah-setengah.</div></div>
+  </div>
+</div>
+
+<!-- FOCUS -->
+<div class="sec" id="section-focus" style="padding-top:16px">
+  <div class="ticard">
+    <div class="tiring"><svg viewBox="0 0 156 156"><circle class="ringbg" cx="78" cy="78" r="66"/><circle class="ringfl" id="tRing" cx="78" cy="78" r="66" stroke-dasharray="415" stroke-dashoffset="0"/></svg><div class="tice"><div class="tinum" id="tDisp">25:00</div><div class="tist" id="tStat">Siap mulai</div></div></div>
+    <div class="tipreset"><button class="tipbtn on" onclick="setT(25,this)">25 mnt</button><button class="tipbtn" onclick="setT(45,this)">45 mnt</button><button class="tipbtn" onclick="setT(60,this)">60 mnt</button><button class="tipbtn" onclick="setT(5,this)">5 mnt</button></div>
+    <div class="tibtns"><button class="tibtn tibtnm" id="tBtn" onclick="toggleT()">Mulai</button><button class="tibtn tibtns2" onclick="resetT()">Reset</button></div>
+  </div>
+  <div class="card">
+    <div class="crd"><div class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="ctt">Protokol Sesi</span></div>
+    <div class="mfli"><div class="mfd"></div><div class="mft">Tetapkan satu tujuan konkret sebelum memulai.</div></div>
+    <div class="mfli"><div class="mfd"></div><div class="mft">Matikan semua notifikasi selama sesi.</div></div>
+    <div class="mfli"><div class="mfd"></div><div class="mft">25 menit fokus, 5 menit istirahat.</div></div>
+    <div class="mfli"><div class="mfd"></div><div class="mft">Setelah sesi selesai, form log otomatis muncul.</div></div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- BOTTOM NAV — 4 items -->
+<div class="bnav">
+  <button class="bi on" data-nav="home" onclick="goHome()">
+    <div class="bii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <span class="bil">Home</span>
+  </button>
+  <button class="bi" data-nav="log" onclick="go('log')">
+    <div class="bii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+    <span class="bil">Log</span>
+  </button>
+  <!-- spacer for floating + button -->
+  <div style="flex:1"></div>
+  <button class="bi" data-nav="progress" onclick="go('progress')">
+    <div class="bii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+    <span class="bil">Progress</span>
+  </button>
+  <button class="bi" data-nav="focus" onclick="go('focus')">
+    <div class="bii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+    <span class="bil">Fokus</span>
+  </button>
+</div>
+
+<!-- FLOATING + BUTTON — true floating, independent of nav -->
+<button class="bnav-plus" onclick="document.getElementById('qlogModal').classList.add('open')">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</button>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var KEY='terra_v5';
+var S={profile:{name:'Adiz Audya',target:'AWS SAA-C03 · Target 2026'},topics:{},notes:{},logs:[],streak:0,best:0,lastDate:null,hours:0,gh:{token:'',repo:'',on:false},tg:{token:'',chatId:'',on:false}};
+function load(){try{var d=localStorage.getItem(KEY);if(d){var p=JSON.parse(d);S.profile=Object.assign({},S.profile,p.profile||{});S.topics=p.topics||{};S.notes=p.notes||{};S.logs=p.logs||[];S.streak=p.streak||0;S.best=p.best||0;S.lastDate=p.lastDate||null;S.hours=p.hours||0;S.gh=Object.assign({},S.gh,p.gh||{});S.tg=Object.assign({},S.tg,p.tg||{});}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+// AFFS
+var AFFS=['Otodidak bukan kelas dua. Beberapa engineer terbaik dunia adalah self-taught learners.','Setiap perintah yang kamu ketik adalah investasi untuk karier masa depan.','Merancang kurikulum sendiri membuktikan kamu bisa berpikir sistematis dan mandiri.','Progress 1% setiap hari menghasilkan peningkatan 37x dalam setahun.','Latar belakang Seni Rupa memberimu visual thinking yang langka di dunia cloud.','Setiap error di terminal adalah pelajaran gratis yang tidak ternilai.','Cloud engineering bukan soal hafalan — ini soal memahami sistem.','Setiap topik yang dicentang adalah bukti konkret bahwa kamu bergerak maju.','Kamu tidak perlu izin siapapun untuk menjadi seorang cloud engineer.','Frustasi hari ini adalah kompetensi besok.','Karier impian dibangun satu sesi belajar dalam satu waktu.','Pilih konsisten daripada sempurna. Jalankan, gagal, perbaiki.','Kamu sedang membangun sesuatu yang akan kamu banggakan dalam 5 tahun ke depan.','Dari seni rupa ke cloud — bukan perpindahan aneh. Itu keberanian.','terra. adalah ruang belajarmu. Kuasai dengan caramu sendiri.','Setiap engineer senior yang kamu kagumi pernah berdiri di titik yang sama denganmu.','Belajar adalah investasi yang tidak bisa dicuri oleh inflasi atau resesi.','Deadline bukan musuh — ia adalah parameter yang membuatmu lebih fokus.','Sertifikasi AWS adalah bukti tertulis dari kompetensi yang sudah kamu bangun.','learn. log. grow. — bukan sekadar tagline. Itu ritual harian yang membangun kompetensi.'];
+var MINDFUL=['Kamu bukan hanya belajar teknologi. Kamu sedang membuktikan bahwa siapapun bisa re-skill dengan tekad.','Kurikulum yang dirancang sendiri adalah bentuk akademisme yang paling murni.','Frustasi adalah sinyal bahwa otak sedang membentuk koneksi neural baru.','Kamu tidak perlu izin siapapun untuk menjadi seorang cloud engineer.','Deadline bukan musuh — ia adalah parameter yang membuatmu lebih fokus.','Belajar adalah satu-satunya investasi yang tidak bisa dicuri oleh inflasi.','Setiap error adalah pelajaran yang tidak diajarkan di buku manapun.','Jangan bandingkan langkahmu dengan orang lain. Track record-mu sendiri sudah luar biasa.','Istirahat adalah bagian dari perjalanan, bukan penghianatan terhadapnya.','Yang paling penting bukan seberapa cepat kamu sampai, tapi bahwa kamu terus bergerak.','Belajar mandiri membutuhkan disiplin 10x lebih besar. Itu yang membuat hasilnya lebih bermakna.','Server yang kamu operasikan hari ini bisa menjadi cerita di interview besok.','learn. log. grow. — bukan sekadar tagline. Itu ritual harian yang membangun kompetensi.','Kamu sudah buktikan: 2 minggu belajar, langsung keterima kerja. Kapasitasmu nyata.','Tidak perlu tahu segalanya untuk memulai. Mulai adalah cara terbaik untuk belajar.','Satu topik dikuasai jauh lebih berharga dari sepuluh topik dipahami setengah-setengah.','Progress konsisten selalu mengalahkan motivasi yang tidak stabil.','Kamu sedang membangun fondasi yang kuat. Batu per batu, hari per hari.','Setiap jam yang kamu investasikan sekarang adalah compound interest untuk masa depan.','Otodidak adalah bukti kedisiplinan diri yang luar biasa.','Dari seni rupa ke cloud engineering. Itu bukan kecelakaan. Itu pilihan berani.','Setiap engineer senior yang kamu kagumi pernah berdiri di titik yang sama denganmu.','Perjalananmu unik. Jalurmu berbeda. Dan itu adalah kekuatanmu.','Konsistensi kecil yang dilakukan setiap hari menghasilkan perubahan besar.','Sertifikasi adalah bukti, bukan tujuan. Kompetensi adalah tujuan sesungguhnya.','Setiap kali kamu membuka terminal, kamu sedang berinvestasi untuk masa depan.','Kamu sedang membuktikan bahwa career switch itu bukan mimpi.','terra. adalah ruang belajarmu. Miliki sepenuhnya.','Latar belakang Seni Rupa memberimu perspektif yang langka di dunia cloud.','Kamu tidak belajar sendiri — kamu membangun versi dirimu yang lebih baik, setiap hari.'];
+
+var affIdx=0,mfIdx=0;
+function makeDots(id,count){var el=document.getElementById(id);if(!el)return;el.innerHTML='';for(var i=0;i<count;i++){var d=document.createElement('div');d.className=(id==='affDots'?'aff-dot':'mf-dot')+(i===0?' on':'');d.style.width=(i===0?'14px':'4px');el.appendChild(d);}}
+function updDots(id,idx,cls){var pos=idx%5;var dots=document.querySelectorAll('#'+id+' .'+cls);for(var i=0;i<dots.length;i++){var a=i===pos;dots[i].classList.toggle('on',a);dots[i].style.width=a?'14px':'4px';}}
+function showAff(n){affIdx=((n%AFFS.length)+AFFS.length)%AFFS.length;var el=document.getElementById('affTxt');if(!el)return;el.style.opacity='0';setTimeout(function(){el.textContent=AFFS[affIdx];el.style.opacity='1';var c=document.getElementById('affCtr');if(c)c.textContent=(affIdx+1)+'/'+AFFS.length;updDots('affDots',affIdx,'aff-dot');},250);}
+function showMF(n){mfIdx=((n%MINDFUL.length)+MINDFUL.length)%MINDFUL.length;var el=document.getElementById('mindfulTxt');if(!el)return;el.style.opacity='0';setTimeout(function(){el.textContent=MINDFUL[mfIdx];el.style.opacity='1';var c=document.getElementById('mindfulCtr');if(c)c.textContent=(mfIdx+1)+'/'+MINDFUL.length;updDots('mindfulDots',mfIdx,'mf-dot');},250);}
+setInterval(function(){affIdx=(affIdx+1)%AFFS.length;showAff(affIdx);},3000);
+setInterval(function(){mfIdx=(mfIdx+1)%MINDFUL.length;showMF(mfIdx);},3000);
+
+// GREETING
+function getGreeting(){var h=new Date().getHours();if(h<11)return'Selamat pagi';if(h<15)return'Selamat siang';if(h<18)return'Selamat sore';return'Selamat malam';}
+function greetIcon(){
+  var h=new Date().getHours();
+  // Morning: sun, Afternoon: cloud-sun, Evening: sunset, Night: moon
+  if(h<11)return'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-left:4px"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  if(h<15)return'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-left:4px"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>';
+  if(h<18)return'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-left:4px"><path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="9" x2="12" y2="2"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/></svg>';
+  return'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-left:4px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+}
+
+// PROFILE
+function saveProf(){S.profile.name=document.getElementById('pName').value||'Adiz Audya';S.profile.target=document.getElementById('pTarget').value;save();applyProf();document.getElementById('profModal').classList.remove('open');toast('Profil tersimpan');}
+function applyProf(){var gt=document.getElementById('gTarget');if(gt&&S.profile.target)gt.textContent=S.profile.target;}
+
+// NAV
+var SECS=['home','progress','kalender','log','medium','referensi','integrasi','mindful','focus'];
+function go(id){
+  var allSecs=document.querySelectorAll('.sec');
+  var allBi=document.querySelectorAll('.bi');
+  var allMic=document.querySelectorAll('.menu-ic');
+
+  // Step 1: fade out
+  allSecs.forEach(function(s){s.classList.remove('visible');});
+
+  setTimeout(function(){
+    // Step 2: hide all, show target
+    allSecs.forEach(function(s){s.classList.remove('on');});
+
+    // Step 3: clear nav active — use data-nav attribute, not index
+    allBi.forEach(function(b){b.classList.remove('on');});
+    allMic.forEach(function(m){m.classList.remove('active-ic');});
+
+    var target=document.getElementById('section-'+id);
+    if(!target)return;
+    target.classList.add('on');
+
+    // Step 4: hero + menu visibility
+    var isHome=(id==='home');
+    var heroCard=document.getElementById('heroCard');
+    var menuGrid=document.getElementById('menuGrid');
+    if(heroCard)heroCard.style.display=isHome?'':'none';
+    if(menuGrid)menuGrid.style.display=isHome?'':'none';
+
+    // Step 5: bottom nav active — match by data-nav attribute, bulletproof
+    var navBtn=document.querySelector('.bi[data-nav="'+id+'"]');
+    if(navBtn)navBtn.classList.add('on');
+
+    // Step 6: menu icon active
+    var mic=document.getElementById('mic-'+id);
+    if(mic)mic.classList.add('active-ic');
+
+    // Step 7: kalender rebuild
+    if(id==='kalender')buildCal();
+
+    // Step 8: scroll top
+    window.scrollTo({top:0,behavior:'smooth'});
+
+    // Step 9: fade in
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){target.classList.add('visible');});
+    });
+  },150);
+}
+
+function goHome(){go('home');}
+
+function goNext(){
+  go('progress');
+  setTimeout(function(){
+    var ph1=document.getElementById('ph1');
+    if(ph1&&!ph1.classList.contains('open'))ph1.classList.add('open');
+    toast('Progress dibuka!');
+  },350);
+}
+
+// TOPICS
+var PH={ph1:{ids:['t1','t2','t3','t4','t5','t6','t7','t8','t9','t10']},ph2:{ids:['t11','t12','t13','t14','t15']},ph3:{ids:['t16','t17','t18','t19','t20','t21']},ph4:{ids:['t22','t23','t24']}};
+function tog(ph){document.getElementById(ph).classList.toggle('open');}
+function ck(e,id){e.stopPropagation();S.topics[id]=!S.topics[id];save();render();stats();var nm=document.getElementById(id+'n');var name=nm?nm.textContent:id;if(S.topics[id]){toast('✓ '+name.substring(0,24));ghCommit('✅ '+name);tgSend('✅ *Topik selesai*\n`'+name+'`');}}
+function tgl(e,id){e.stopPropagation();var el=document.getElementById(id);el.classList.toggle('open');if(el.classList.contains('open')){el.value=S.notes[id]||'';el.focus();}}
+function saveNote(id){var v=(document.getElementById(id)||{}).value||'';if(v!==S.notes[id]){S.notes[id]=v;save();}}
+function loadNotes(){Object.keys(S.notes||{}).forEach(function(id){var el=document.getElementById(id);if(el)el.value=S.notes[id];});}
+function render(){
+  for(var ph in PH){var ids=PH[ph].ids;var done=ids.filter(function(id){return S.topics[id];}).length;var total=ids.length;var pct=Math.round(done/total*100);
+    var f=document.getElementById(ph+'f');if(f)f.style.width=pct+'%';
+    var p=document.getElementById(ph+'p');if(p)p.textContent=pct+'%';
+    var c=document.getElementById(ph+'c');if(c)c.textContent=done+'/'+total;
+    ids.forEach(function(id){var btn=document.querySelector('[onclick="ck(event,\''+id+'\')"]');var nm=document.getElementById(id+'n');if(btn)btn.classList.toggle('on',!!S.topics[id]);if(nm)nm.classList.toggle('done',!!S.topics[id]);});}
+  var all=[];for(var ph in PH)all=all.concat(PH[ph].ids);
+  var next=null;for(var i=0;i<all.length;i++){if(!S.topics[all[i]]){next=all[i];break;}}
+  if(next){var nm=document.getElementById(next+'n');var nt=document.getElementById('nextTtl');if(nm&&nt)nt.textContent=nm.textContent;}
+}
+
+// STATS
+function stats(){
+  var all=[];for(var ph in PH)all=all.concat(PH[ph].ids);
+  var done=all.filter(function(id){return S.topics[id];}).length;
+  var pct=Math.round(done/24*100);
+  // Hero card
+  var hs=document.getElementById('heroStreak');if(hs)hs.textContent=S.streak;
+  var hh=document.getElementById('heroHours');if(hh)hh.textContent=S.hours.toFixed(1);
+  var ht=document.getElementById('heroTopics');if(ht)ht.textContent=done+'/24';
+  var hb=document.getElementById('heroBest');if(hb)hb.textContent=S.best+' hr';
+  var bar=document.getElementById('heroBar');if(bar)bar.style.width=pct+'%';
+  var lbl=document.getElementById('heroBarLabel');
+  if(lbl){if(S.logs.length===0)lbl.textContent='Belum ada sesi belajar hari ini.';else lbl.textContent=S.logs.length+' sesi tercatat · '+done+' topik selesai';}
+  // Other stats
+  var stT=document.getElementById('stT2');if(stT)stT.textContent=done;
+  var stD=document.getElementById('stD');if(stD)stD.textContent=S.logs.length;
+  // Streak pill header
+  var hStr=document.getElementById('hStreak');// removed from new design
+}
+
+// QUICK LOG (from + button)
+var qmood='';
+function qpm(btn,m){var btns=document.querySelectorAll('.qlog-sheet .moodbtn');for(var i=0;i<btns.length;i++)btns[i].classList.remove('sel');btn.classList.add('sel');qmood=m;}
+function saveQLog(){var text=document.getElementById('qlogText').value.trim();var hrs=parseFloat(document.getElementById('qlogHrs').value)||0;if(!text){toast('Tulis dulu ya!');return;}_log(text,hrs,qmood||'good');document.getElementById('qlogText').value='';document.getElementById('qlogHrs').value='';qmood='';var btns=document.querySelectorAll('.qlog-sheet .moodbtn');for(var i=0;i<btns.length;i++)btns[i].classList.remove('sel');document.getElementById('qlogModal').classList.remove('open');}
+
+function _log(text,hrs,m){var today=new Date(),dk=today.toISOString().split('T')[0];S.logs.unshift({id:Date.now(),text:text,hours:hrs,mood:m,date:today.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),dk:dk});S.hours=+(S.hours+hrs).toFixed(1);var ts=today.toDateString();if(S.lastDate!==ts){var y=new Date();y.setDate(y.getDate()-1);S.streak=(S.lastDate===y.toDateString())?S.streak+1:1;S.lastDate=ts;if(S.streak>S.best)S.best=S.streak;}save();renderLogs();stats();toast('Log tersimpan!');tgSend('📝 *Log Belajar*\n'+text+(hrs?'\n⏱ '+hrs+' jam':''));ghCommit('📝 '+text.substring(0,50));}
+function moodIcon(m){
+  var icons={
+    tired:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-1 4-1 4 1 4 1"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+    okay:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+    good:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+    great:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+    fire:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>'
+  };
+  return icons[m]||icons.good;
+}
+function renderLogs(){var el=document.getElementById('logList');if(!S.logs.length){el.innerHTML='<div class="empt"><div class="empic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--t4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div class="empt2">Belum ada log</div><div class="emps">Tap + untuk mencatat sesi belajar</div></div>';return;}el.innerHTML=S.logs.map(function(l){return'<div class="loge"><div class="logt"><span class="logd">'+l.date+'</span><span style="color:var(--t3);display:flex;align-items:center">'+moodIcon(l.mood)+'</span></div><div class="logtx">'+l.text+'</div>'+(l.hours?'<div class="logh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'+l.hours+' jam</div>':'')+'</div>';}).join('');}
+
+// CALENDAR
+function buildCal(){var grid=document.getElementById('calGrid'),months=document.getElementById('calMonths');grid.innerHTML='';months.innerHTML='';var map={};S.logs.forEach(function(l){if(l.dk)map[l.dk]=(map[l.dk]||0)+1;});var today=new Date(),start=new Date(today);start.setDate(start.getDate()-181);while(start.getDay()!==0)start.setDate(start.getDate()-1);var weeks=[];var cur=new Date(start);while(cur<=today){var w=[];for(var d=0;d<7;d++){var dk=cur.toISOString().split('T')[0];var c=map[dk]||0;w.push({date:new Date(cur),v:c===0?0:c===1?1:c===2?2:c<=4?3:4,fut:cur>today});cur.setDate(cur.getDate()+1);}weeks.push(w);}var mn=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];var lm=-1;weeks.forEach(function(w){var m=w[0].date.getMonth();var l=document.createElement('div');l.className='caml';if(m!==lm){l.textContent=mn[m];lm=m;}months.appendChild(l);});weeks.forEach(function(w){var col=document.createElement('div');col.className='cawk';w.forEach(function(item){var cell=document.createElement('div');cell.className='cacel';cell.setAttribute('data-v',item.fut?0:item.v);col.appendChild(cell);});grid.appendChild(col);});var tot=document.getElementById('calTotal');if(tot)tot.textContent=S.logs.length+' sesi tahun ini';var mmap={};S.logs.forEach(function(l){if(l.dk){var ym=l.dk.substring(0,7);if(!mmap[ym])mmap[ym]={s:0,h:0};mmap[ym].s++;mmap[ym].h+=l.hours||0;}});var keys=Object.keys(mmap).sort().reverse().slice(0,5);var ms=document.getElementById('monthlySummary');if(!keys.length){if(ms)ms.textContent='Belum ada data.';return;}if(ms)ms.innerHTML=keys.map(function(ym){var parts=ym.split('-');var d=mmap[ym];return'<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln)"><span style="font-size:13px;font-weight:600;color:var(--t1)">'+mn[parseInt(parts[1])-1]+' '+parts[0]+'</span><div style="display:flex;gap:8px"><span style="font-size:11px;color:var(--t4)">'+d.s+' sesi</span><span style="font-size:11px;background:var(--t1);color:var(--inv);border-radius:20px;padding:2px 9px;font-weight:600">'+d.h.toFixed(1)+' jam</span></div></div>';}).join('')+'<div style="height:4px"></div>';}
+
+// MEDIUM DRAFT
+function genDraft(){var src=document.getElementById('draftSrc').value,ct=document.getElementById('draftTitleIn').value.trim(),logs=[];if(src==='recent')logs=S.logs.slice(0,5);else if(src==='week'){var w=new Date();w.setDate(w.getDate()-7);logs=S.logs.filter(function(l){return new Date(l.date)>=w;});}else if(src==='all')logs=S.logs;else if(src==='progress'){var all=[];for(var ph in PH)all=all.concat(PH[ph].ids);var done=all.filter(function(id){return S.topics[id];}).length;var dl=Object.keys(S.topics).filter(function(id){return S.topics[id];}).map(function(id){var el=document.getElementById(id+'n');return el?el.textContent:id;});document.getElementById('draftTitle').value=ct||'Progress Cloud Engineering — '+done+'/24 Topik';document.getElementById('draftBody').value='## Perjalanan Belajar Cloud Engineering\n\nProgress: '+done+' dari 24 topik selesai\n\n### Topik yang Sudah Dikuasai\n'+dl.map(function(t){return'- ✅ '+t;}).join('\n')+'\n\n---\n*terra. — personal learning tracker*';document.getElementById('draftResult').style.display='block';return;}if(!logs.length){toast('Belum ada log!');return;}var today=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});document.getElementById('draftTitle').value=ct||'Catatan Belajar — '+today;document.getElementById('draftBody').value='## Dokumentasi Belajar '+today+'\n\n'+logs.map(function(l,i){return'### Sesi '+(i+1)+'\n'+l.text+(l.hours?'\n\n*Durasi: '+l.hours+' jam*':'');}).join('\n\n---\n\n')+'\n\n---\n*terra. — personal learning tracker*';document.getElementById('draftResult').style.display='block';toast('Draft siap!');}
+function copyDraft(){var t=document.getElementById('draftTitle').value,b=document.getElementById('draftBody').value;navigator.clipboard.writeText('# '+t+'\n\n'+b).then(function(){toast('Tersalin!');}).catch(function(){toast('Copy manual ya!');});}
+
+// EXPORT/IMPORT
+function exportData(){var blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='terra-backup-'+new Date().toISOString().split('T')[0]+'.json';a.click();URL.revokeObjectURL(url);toast('Data diekspor!');}
+function importData(e){var file=e.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(ev){try{var d=JSON.parse(ev.target.result);S.profile=Object.assign({},S.profile,d.profile||{});S.topics=d.topics||{};S.notes=d.notes||{};S.logs=d.logs||[];S.streak=d.streak||0;S.best=d.best||0;S.lastDate=d.lastDate||null;S.hours=d.hours||0;S.gh=Object.assign({},S.gh,d.gh||{});S.tg=Object.assign({},S.tg,d.tg||{});save();render();renderLogs();stats();applyProf();loadNotes();toast('Data diimpor!');}catch(err){toast('File tidak valid!');}};r.readAsText(file);}
+
+// INTEGRATION
+function togGH(){var f=document.getElementById('ghForm');f.classList.toggle('open');document.getElementById('ghBtn').textContent=f.classList.contains('open')?'Tutup':'Konfigurasi GitHub';if(f.classList.contains('open')){document.getElementById('ghTok').value=S.gh.token||'';document.getElementById('ghRep').value=S.gh.repo||'';}}
+function togTG(){var f=document.getElementById('tgForm');f.classList.toggle('open');document.getElementById('tgBtn').textContent=f.classList.contains('open')?'Tutup':'Konfigurasi Telegram';if(f.classList.contains('open')){document.getElementById('tgTok').value=S.tg.token||'';document.getElementById('tgChat').value=S.tg.chatId||'';}}
+function saveGH(){var t=document.getElementById('ghTok').value.trim(),r=document.getElementById('ghRep').value.trim();if(!t||!r){toast('Isi semua field!');return;}S.gh={token:t,repo:r,on:true};save();updInt();document.getElementById('ghForm').classList.remove('open');document.getElementById('ghBtn').textContent='Edit GitHub';toast('GitHub aktif!');}
+function saveTG(){var t=document.getElementById('tgTok').value.trim(),c=document.getElementById('tgChat').value.trim();if(!t||!c){toast('Isi semua field!');return;}S.tg={token:t,chatId:c,on:true};save();updInt();document.getElementById('tgForm').classList.remove('open');document.getElementById('tgBtn').textContent='Edit Telegram';toast('Telegram aktif!');}
+function updInt(){var gb=document.getElementById('ghBadge'),gs=document.getElementById('ghStat'),tb=document.getElementById('tgBadge'),ts=document.getElementById('tgStat');if(S.gh.on&&S.gh.token){gb.textContent='On';gb.className='ibdg ion';gs.textContent=S.gh.repo;}else{gb.textContent='Off';gb.className='ibdg ioff';gs.textContent='Belum dikonfigurasi';}if(S.tg.on&&S.tg.token){tb.textContent='On';tb.className='ibdg ion';ts.textContent='Chat ID: '+S.tg.chatId;}else{tb.textContent='Off';tb.className='ibdg ioff';ts.textContent='Belum dikonfigurasi';}}
+async function ghCommit(msg){if(!S.gh.on||!S.gh.token||!S.gh.repo)return;try{var p=S.gh.repo.split('/'),dt=new Date().toISOString(),content=btoa(unescape(encodeURIComponent('# terra.\n\n'+msg+'\n\nDate: '+dt)));await fetch('https://api.github.com/repos/'+p[0]+'/'+p[1]+'/contents/logs/'+dt.split('T')[0]+'-'+Date.now()+'.md',{method:'PUT',headers:{'Authorization':'token '+S.gh.token,'Content-Type':'application/json'},body:JSON.stringify({message:'📚 '+msg.substring(0,50),content:content})});}catch(e){}}
+async function tgSend(msg){if(!S.tg.on||!S.tg.token||!S.tg.chatId)return;try{await fetch('https://api.telegram.org/bot'+S.tg.token+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:S.tg.chatId,text:msg,parse_mode:'Markdown'})});}catch(e){}}
+async function testAll(){document.getElementById('testRes').textContent='Mengirim...';await tgSend('🧪 *Test terra.*\n_'+new Date().toLocaleString('id-ID')+'_');await ghCommit('🧪 Test '+new Date().toISOString());document.getElementById('testRes').textContent='Dikirim!';}
+async function reqNotif(){if(!('Notification' in window)){document.getElementById('notifStat').textContent='Browser tidak mendukung.';return;}var p=await Notification.requestPermission();if(p==='granted'){document.getElementById('notifBtn').textContent='Aktif ✓';document.getElementById('notifStat').textContent='Berhasil!';new Notification('terra.',{body:'Siap mengingatkan kamu belajar!'});}else{document.getElementById('notifStat').textContent='Ditolak.';}}
+
+// AUTOLOG
+var lastMins=25;
+function closeAL(){document.getElementById('alSheet').classList.remove('open');}
+function saveAL(){var t=document.getElementById('alTxt').value.trim();if(t)_log(t,lastMins/60,'fire');closeAL();}
+
+// TIMER
+var tS=1500,tD=1500,tR=false,tI=null,C=2*Math.PI*66;
+function setT(m,btn){document.querySelectorAll('.tipbtn').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');lastMins=m;tD=m*60;tS=tD;if(tR)stopT();updateT();document.getElementById('tStat').textContent=m===5?'Istirahat':m+' mnt · Fokus belajar';}
+function toggleT(){tR?stopT():startT();}
+function startT(){tR=true;document.getElementById('tBtn').textContent='Pause';document.getElementById('tStat').textContent='Sedang berjalan...';tI=setInterval(function(){tS--;updateT();if(tS<=0){stopT();document.getElementById('tStat').textContent='Selesai!';document.getElementById('tBtn').textContent='Mulai';setTimeout(function(){document.getElementById('alTxt').value='';document.getElementById('alSheet').classList.add('open');},500);}},1000);}
+function stopT(){tR=false;clearInterval(tI);document.getElementById('tBtn').textContent=(tS===tD||tS===0)?'Mulai':'Lanjutkan';}
+function resetT(){stopT();tS=tD;document.getElementById('tBtn').textContent='Mulai';document.getElementById('tStat').textContent='Siap mulai';updateT();}
+function updateT(){var m=Math.floor(tS/60).toString().padStart(2,'0'),s=(tS%60).toString().padStart(2,'0');document.getElementById('tDisp').textContent=m+':'+s;document.getElementById('tRing').style.strokeDashoffset=C*(1-tS/tD);document.getElementById('tRing').style.strokeDasharray=C;}
+
+// TOAST
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2200);}
+
+// PWA
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){});
+
+// LOADER
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('loader').classList.add('hide');document.getElementById('app').classList.add('show');},2400);});
+
+// INIT
+load();
+// Affirmation
+var affEl=document.getElementById('affTxt');if(affEl){affEl.textContent=AFFS[0];affEl.style.opacity='1';}
+document.getElementById('affCtr').textContent='1/'+AFFS.length;
+makeDots('affDots',5);
+// Mindful
+var mfEl=document.getElementById('mindfulTxt');if(mfEl){mfEl.textContent=MINDFUL[0];mfEl.style.opacity='1';}
+document.getElementById('mindfulCtr').textContent='1/'+MINDFUL.length;
+makeDots('mindfulDots',5);
+// Apply
+applyProf();
+render();renderLogs();stats();updateT();updInt();loadNotes();
+requestAnimationFrame(function(){
+  requestAnimationFrame(function(){
+    var home=document.getElementById('section-home');
+    if(home)home.classList.add('visible');
+    // Set home nav active by data-nav
+    var homeBtn=document.querySelector('.bi[data-nav="home"]');
+    if(homeBtn)homeBtn.classList.add('on');
+  });
+});
+document.getElementById('pName').value=S.profile.name;
+document.getElementById('pTarget').value=S.profile.target;
+</script>
+</body>
+</html>
